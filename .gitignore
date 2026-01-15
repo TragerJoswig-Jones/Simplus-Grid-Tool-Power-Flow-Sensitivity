@@ -1,0 +1,8 @@
+/Library/SimplexPS.slx
+/Library/SimplusPS.slx
+/Library/SimplusGT.slx
+*.slxc
+*.pdf
+slprj/
+*.asv
+*.mat
