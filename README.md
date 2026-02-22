@@ -27,7 +27,7 @@ If you use this modified version of the Simplus-GT toolbox, please cite the foll
       year={2025}
 }
 ```
-as well as the original toolbox at "[github.com/Future-Power-Networks/Simplus-Grid-Tool](github.com/Future-Power-Networks/Simplus-Grid-Tool)".
+as well as the original toolbox at "[github.com/Future-Power-Networks/Simplus-Grid-Tool](https://github.com/Future-Power-Networks/Simplus-Grid-Tool)".
 
 ## Simplus Grid Tool (Version: v2025-Sep-11*)
 
