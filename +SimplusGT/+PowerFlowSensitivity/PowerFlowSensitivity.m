@@ -9,7 +9,8 @@ function [dP,dQ,dV,dTh,dw] = PowerFlowSensitivity(dP_,dQ_,dV_,dTh_,ListBus,ListL
 %   Takes in the parameter perturbations (dP_, dQ_, dV_, dTh_) and a list of
 %   bus types (Slack: 1, PV: 2, PQ: 3) and returns the power flow
 %   sensitivities to that parameter perturbation
-J = -SimplusGT.PowerFlowSensitivity.WholePowerFlowJacobian(ListBus,ListLine,ListPowerFlowBase);  % Negative due to load power notation used
+J = SimplusGT.PowerFlowSensitivity.WholePowerFlowJacobian(ListBus,ListLine,ListPowerFlowBase); 
+J = -J; % Negative due to load power convention used by Simplus-GT when storing power flows...
 bustype = ListBus(:, 2);
 [dP,dQ,dV,dTh,dw] = power_flow_sensitivity(dP_, dQ_, dV_, dTh_, J, bustype);
 end
