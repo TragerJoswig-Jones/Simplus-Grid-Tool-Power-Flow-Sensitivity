@@ -9,11 +9,35 @@
 result_dir = "Examples/PowerFlowSensitivity/Data";
 files = dir(fullfile(result_dir, '*.mat'));
 
-fileNames = ["BaseCase.mat", "CaseA.mat", "CaseB.mat", "CaseA2.mat", "GFMCaseA.mat"];  % Custom ordering
-caseLabels = ["Base Case", "Case A", "Case B", "Case A-2", "Case A-3"];
-for i = 1:length(fileNames)
-    fileName = fileNames(i);
-    files(i).name = fileName;
+% fileNames = ["BaseCase.mat", "CaseA.mat", "CaseB.mat", "CaseA2.mat", "GFMCaseA.mat"];  % Custom ordering
+% caseLabels = ["Base Case", "Case A", "Case B", "Case A-2", "Case A-3"];
+
+% fileNames = ["CaseA.mat", "CaseA2.mat", "GFMCaseA.mat"];  % Remedial Action Custom Ordering
+% caseLabels = ["Case A", "Case A-2", "Case A-3"];
+% dflt_colors = get(gca, 'ColorOrder');
+% caseColors = {dflt_colors(2, :), dflt_colors(4, :), dflt_colors(5, :)};
+% caseLineStyles = {'--', '-.', '--'}; % {"-", "--", ":", "-.", "--"};
+% caseLineWidths = {1.5, 1.5, 2};
+
+fileNames = ["BaseCase.mat", "CaseA.mat", "CaseB.mat"];  % Active Power Sensitivity Case Ordering
+caseLabels = ["Base Case", "Case A", "Case B"];
+dflt_colors = get(gca, 'ColorOrder');
+caseColors = {dflt_colors(1, :), dflt_colors(2, :), dflt_colors(3, :)};
+caseLineStyles = {'-', '--', ':'}; % {"-", "--", ":", "-.", "--"};
+caseLineWidths = {1.5, 1.5, 1.5};
+
+% for i = 1:length(fileNames)
+%     fileName = fileNames(i);
+%     files(i).name = fileName;
+% end
+
+for i = length(files):-1:1
+    fileNamesIdx = find(files(i).name == fileNames);
+    if isempty(fileNamesIdx)
+        files(i) = [];  % Remove file from plot data
+    else
+        files(i).name = fileNames(fileNamesIdx);  % Set name from case labels
+    end
 end
 
 simout = [];
@@ -30,7 +54,7 @@ fig.Position = figpos; theme(fig,"light");
 %plotPowers(simout, ["Scope10Data"], 5, ["\omega"], ["Base Case", "Case A", "Case A-2", "Case B"], false, fig);
 
 % axs = plotPowers(simout, ["Scope10Data"], [1,5], ["$|V|$", "$\omega$"], ["Base Case", "Case A", "Case A-2", "Case B"], [true, false], fig);
-axs = plotPowers(simout, ["Scope10Data"], [1,5], ["$|V|$ (pu)", "$\omega$ (pu)"], caseLabels, [true, false], fig);
+axs = plotPowers(simout, ["Scope10Data"], [1,5], ["$|V|$ (pu)", "$\omega$ (pu)"], caseLabels, [true, false], fig, caseColors, caseLineStyles, caseLineWidths);
 xlabel("time (s)")
 
 xlim(axs(1), [0.9,3])
@@ -43,14 +67,15 @@ pos1(2) = pos1(2) + 0.075;  % shift upward
 set(axs(2), 'Position', pos1)
 axs(1).XTickLabel = [];
 
-exportgraphics(fig,'loadstepsim.pdf','BackgroundColor','none','ContentType','vector');
+% exportgraphics(fig,'loadstepsim.pdf','BackgroundColor','none','ContentType','vector');
+exportgraphics(fig,'loadstepsim.png','BackgroundColor','none','Resolution',400);
 
 % Vdq
 %ylim(axs(1), [0.8,1.1])
 %ylim(axs(2), [-0.1,0.1])
 
 
-function axs = plotPowers(simdata, scopeNames, dataIdx, axisLabels, legendLabels, plotNorm, fig, linestyles, linewidths)
+function axs = plotPowers(simdata, scopeNames, dataIdx, axisLabels, legendLabels, plotNorm, fig, colors, linestyles, linewidths)
 arguments
     simdata 
     scopeNames
@@ -59,8 +84,9 @@ arguments
     legendLabels = [];
     plotNorm = false;
     fig = [];
+    colors = get(gca, 'ColorOrder');
     linestyles = {"-", "--", ":", "-.", "--"};
-    linewidths = [1.5, 1.5, 1.5, 1.5, 2];
+    linewidths = {1.5, 1.5, 1.5, 1.5, 2};
 end
     if isempty(fig)
         fig = figure();
@@ -68,7 +94,7 @@ end
     for scopeName = scopeNames
         for i = 1:length(simdata)
             simout = simdata(i);
-            axs = plotPower(fig, simout, scopeName, linestyles{i}, linewidths(i), dataIdx, axisLabels, plotNorm);
+            axs = plotPower(fig, simout, scopeName, colors{i}, linestyles{i}, linewidths{i}, dataIdx, axisLabels, plotNorm);
         end
     end
     %ax = axes('Parent',fig);
@@ -76,11 +102,12 @@ end
     legend(axs(1), legendLabels, 'location', 'northoutside', 'orientation', 'horizontal', 'NumColumns', 3);
 end
 
-function axs = plotPower(fig, simout, scopeName, linestyle, linewidth, dataIdx, axisLabels, plotNorm)
+function axs = plotPower(fig, simout, scopeName, color, linestyle, linewidth, dataIdx, axisLabels, plotNorm)
 arguments
     fig 
     simout 
     scopeName 
+    color = 'b'
     linestyle = '-'
     linewidth = 2
     dataIdx = 7
@@ -104,7 +131,7 @@ end
         ax = subplot(nsubplots, 1, j);
         %ax = nexttile;
         axs = [axs, ax];
-        plot(tvalues, values, linestyle, 'LineWidth', linewidth);
+        plot(tvalues, values, linestyle, 'LineWidth', linewidth, 'Color', color);
         hold on;
         ylabel(axisLabels(j), 'Interpreter', 'latex')
     end
