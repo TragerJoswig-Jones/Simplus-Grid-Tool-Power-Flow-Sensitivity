@@ -6,6 +6,8 @@ perturbation in power injections. The examples included (Examples/PowerFlowSensi
 of the paper [**"System Strength Sensitivity to Power Flow Perturbations in AC Power Systems with
 Inverter-based Resources"**]() by Trager Joswig-Jones, Baosen Zhang, Shuan Dong, and Jin Tan.
 
+[![System Strength ResearchPoster](https://raw.githubusercontent.com/TragerJoswig-Jones/Simplus-Grid-Tool-Power-Flow-Sensitivity/refs/heads/main/Poster_UW_ECE_Research_Showcase_2026.png)](https://www.ece.uw.edu/news-events/researchday/#:~:text=System%20Strength%20Sensitivity%20to%20Power%20Flow%20Perturbations)
+
 The development of this modified repository was primarily done by [Trager Joswig-Jones](https://github.com/TragerJoswig-Jones) (joswitra@uw.edu) during 
 a summer internship at the [National Renewable Energy Laboratory](https://github.com/NREL).
 
